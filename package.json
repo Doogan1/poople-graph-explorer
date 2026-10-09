@@ -3,7 +3,9 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "engines": { "node": ">=22.18.0" },
+  "engines": {
+    "node": ">=22.18.0"
+  },
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "build": "tsc --noEmit && vite build",
@@ -13,9 +15,14 @@
     "test": "vitest run",
     "data:verify": "node scripts/verify-data.mjs"
   },
-  "dependencies": { "react": "19.2.0", "react-dom": "19.2.0" },
+  "dependencies": {
+    "cytoscape": "3.34.3",
+    "react": "19.2.0",
+    "react-dom": "19.2.0"
+  },
   "devDependencies": {
     "@eslint/js": "^10.0.0",
+    "@types/cytoscape": "3.21.9",
     "@types/node": "^24.0.0",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",

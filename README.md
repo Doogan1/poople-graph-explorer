@@ -2,9 +2,9 @@
 
 An interactive four-letter word graph explorer, built incrementally toward an interruptible, radially constrained force-directed re-root animation. Product requirements are in [SPEC.md](SPEC.md).
 
-## Current milestone: M0
+## Current milestone: M1
 
-The foundation is implemented: Vite/React/TypeScript, lint and test tooling, a versioned local ENABLE dictionary, normalization, wildcard-bucket adjacency, connected components, complete-graph BFS layers and representative shortest paths. The initial page reports computed graph counts and BFS layer sizes from POOP. Graph rendering and root input are M1; simulation and animation are M2.
+The foundation and renderer are implemented: Vite/React/TypeScript, lint and test tooling, a versioned local ENABLE dictionary, pure graph algorithms, and Cytoscape graph rendering. Select a root by typing, clicking a node, or using the keyboard word selector. Choose a visible BFS radius, toggle guide rings, zoom/pan, and fit the camera. The current radial layout updates instantly on re-root; simulation and the signature continuous animation are M2.
 
 ## Run
 
@@ -43,12 +43,20 @@ The exact official Poople dictionary remains an **unverified future input**.
 - `bfs` returns a distance entry for every loaded word; `null` means unreachable. Unknown roots/endpoints throw. Layers contain only reachable vertices. Eccentricity is scoped to the root's component. The disconnected global graph has no finite extended-distance diameter; exact component diameters are later work.
 - `shortestPath` returns one deterministic predecessor chain, or `null` for disconnected endpoints. It does not claim to compute the shortest-path DAG or path count.
 - `src/data/dictionary.ts` loads the small static extract and builds topology once outside React. The M0 page reads that complete graph. There is no visibility sampling yet.
-- M1 will introduce a Cytoscape adapter and explicit visible-radius selection, with all BFS still on the complete graph. M2 will introduce simulation-owned positions/velocities, smoothly retargeted radial constraints and cancellation generations. Renderer performance and the root-centering policy need measurement before choosing the final implementation.
+- `src/rendering/view.ts` selects radius 0–3 (default 2), capped at 600 words in BFS traversal order. This keeps a root predecessor path for every included node. It reports full reachable/eligible counts separately from visible word/edge counts. No BFS or metrics are computed using Cytoscape's displayed subset.
+- `src/layout/radial.ts` seeds deterministic world-space rings at 180-unit spacing; Cytoscape consumes those positions using the preset layout. This is the static M1 baseline; positions reset on re-root pending M2's simulation. Angles/edge lengths carry no graph-distance meaning.
+- The Cytoscape adapter updates surviving node objects rather than rebuilding the renderer. Guide rings are noninteractive background nodes, excluded from view counts, graph algorithms and camera fitting. Camera coordinates are independent of world positions. React does not store per-node coordinates; the host destroys Cytoscape and disconnects its resize observer on unmount.
+- Root and neighbor labels remain visible; outer labels appear on hover or at closer zoom. The legend and word inspector report numeric distance; keyboard root input and a visible-word selector provide alternatives to canvas interactions.
+- M2 will introduce simulation-owned positions/velocities, smoothly retargeted radial constraints and cancellation generations. Animated renderer throughput, forces and the root-centering policy still need measurement; M1 does not establish an animation frame-rate benchmark.
 
 ## Verification and review
 
 Tests use hand-checkable square, clique and disconnected fixtures plus an independent Hamming-distance oracle. They cover normalization, edge symmetry, no loops/duplicates, components, BFS membership, unreachable distances, unknown words, path reconstruction and real-data provenance/partition checks.
 
-For manual M0 review, open the page at desktop and narrow viewport sizes, check the counts against `npm run data:verify`, and navigate attribution links with the keyboard. Animation QA (`POOP → OMEN → POOP`, rapid interruptions, pause/resume and reduced motion) belongs to M2, when animation exists.
+M1 adds tested view radius/cap selection, unchanged complete-graph distances, finite radial positions, induced edges and headless adapter updates/identity. All 23 tests, lint, typecheck, build and data verification pass.
+
+Manual M1 checks: `POOP → OMEN → POOP`, canvas-node re-rooting, unknown `XXXX` preserving the current graph, isolate `ABRI` (one node/zero edges; eccentricity 0), radius changes, BATS radius 3 (600 visible words, 595 omitted within the radius), ring toggle and camera buttons. Inspect narrow viewports, keyboard root/word selection, hover labels and background panning. The public repository is at https://github.com/Doogan1/poople-graph-explorer.
+
+Animation QA (rapid interruptions, pause/resume and reduced motion) belongs to M2, when animation exists. M1 changes remain uncommitted for milestone review.
 
 The repository tracks source code, tests and pinned data. Generated builds, installed dependencies and the local npm cache are excluded by `.gitignore`.
