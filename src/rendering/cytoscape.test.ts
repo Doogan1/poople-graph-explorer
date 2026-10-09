@@ -4,7 +4,7 @@ import { buildGraph } from '../graph/topology';
 import { bfs } from '../graph/traversal';
 import { radialPositions } from '../layout/radial';
 import { selectView } from './view';
-import { updateGraph, LAYER_COLORS } from './cytoscape';
+import { updateGraph, updatePositions, LAYER_COLORS } from './cytoscape';
 
 it('updates the renderer with exact distances and preserves surviving word identity', () => {
   const graph = buildGraph(['cold', 'cord', 'bold', 'bord', 'zzzz']);
@@ -33,5 +33,21 @@ it('updates the renderer with exact distances and preserves surviving word ident
     expect(cy.nodes('.word')).toHaveLength(1);
     expect(cy.edges()).toHaveLength(0);
     expect(cy.nodes('.ring')).toHaveLength(0);
+  } finally { cy.destroy(); }
+});
+
+it('updates frame coordinates and moving ring origin without replacing topology', () => {
+  const graph = buildGraph(['cold', 'cord']);
+  const view = selectView(graph, bfs(graph, 'cold'), 1);
+  const cy = cytoscape({ headless: true });
+  try {
+    updateGraph(cy, view, radialPositions(view), true);
+    const word = cy.getElementById('cold')[0];
+    const edge = cy.edges()[0];
+    updatePositions(cy, new Map([['cold', { x: 10, y: 20 }], ['cord', { x: 40, y: 80 }]]), { x: 10, y: 20 });
+    expect(cy.getElementById('cold')[0]).toBe(word);
+    expect(cy.edges()[0]).toBe(edge);
+    expect(cy.getElementById('cold').position()).toEqual({ x: 10, y: 20 });
+    expect(cy.nodes('.ring').first().position()).toEqual({ x: 10, y: 20 });
   } finally { cy.destroy(); }
 });

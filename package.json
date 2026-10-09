@@ -17,12 +17,14 @@
   },
   "dependencies": {
     "cytoscape": "3.34.3",
+    "d3-force": "3.0.0",
     "react": "19.2.0",
     "react-dom": "19.2.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.0",
     "@types/cytoscape": "3.21.9",
+    "@types/d3-force": "3.0.10",
     "@types/node": "^24.0.0",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",

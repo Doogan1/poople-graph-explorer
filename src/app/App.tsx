@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState, type SubmitEvent } from 'react';
 import { graph, metadata } from '../data/dictionary';
 import { normalizeWord } from '../graph/dictionary';
 import { bfs } from '../graph/traversal';
-import { selectView } from '../rendering/view';
+import { selectView, MAX_VISIBLE_WORDS } from '../rendering/view';
 import { LAYER_COLORS } from '../rendering/cytoscape';
 import GraphCanvas from '../ui/GraphCanvas';
 
@@ -30,8 +30,8 @@ export default function App() {
 
   return <main className="explorer">
     <header className="explorer-header">
-      <div><span className="eyebrow">Poople Graph Explorer · M1</span><h1>One letter changes everything.</h1></div>
-      <p className="muted">ENABLE · {format(graph.words.length)} words · {format(graph.edgeCount)} edges<br />Static radial baseline · physics arrives in M2</p>
+      <div><span className="eyebrow">Poople Graph Explorer · M2</span><h1>One letter changes everything.</h1></div>
+      <p className="muted">ENABLE · {format(graph.words.length)} words · {format(graph.edgeCount)} edges<br />Progressive radial force simulation</p>
     </header>
     <section className="workspace" aria-labelledby="explore-heading">
       <div className="toolbar">
@@ -52,7 +52,7 @@ export default function App() {
         <GraphCanvas view={view} rings={rings} onRoot={selectRoot} />
         <div className="view-info" aria-live="polite">
           <p><strong>{root!.toUpperCase()}</strong> · showing <strong>{format(view.words.length)}</strong> words and <strong>{format(view.edges.length)}</strong> edges within {radius} moves.</p>
-          <p className="muted">{format(view.reachableCount - view.words.length)} reachable words hidden from this view. {view.capped && `Rendering capped at 600 words; ${format(view.eligibleCount - view.words.length)} words inside the requested radius are omitted in BFS order.`}</p>
+          <p className="muted">{format(view.reachableCount - view.words.length)} reachable words hidden from this view. {view.capped && `Rendering capped at ${MAX_VISIBLE_WORDS} words; ${format(view.eligibleCount - view.words.length)} words inside the requested radius are omitted in BFS order.`}</p>
         </div>
         <div className="legend" aria-label="Shortest-path distance legend">
           {LAYER_COLORS.slice(0, Math.min(radius, result.eccentricity) + 1).map((color, distance) => <span key={distance}><i style={{ background: color }} />{distance === 0 ? 'Root · distance 0' : `Distance ${distance}`}</span>)}

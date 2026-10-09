@@ -1,6 +1,8 @@
 import type { WordGraph } from '../graph/topology';
 import type { BfsResult } from '../graph/traversal';
 
+export const MAX_VISIBLE_WORDS = 200;
+
 export interface GraphView {
   root: string;
   words: readonly string[];
@@ -11,7 +13,7 @@ export interface GraphView {
   capped: boolean;
 }
 
-export function selectView(graph: WordGraph, result: BfsResult, radius: number, limit = 600): GraphView {
+export function selectView(graph: WordGraph, result: BfsResult, radius: number, limit = MAX_VISIBLE_WORDS): GraphView {
   if (!Number.isInteger(radius) || radius < 0 || !Number.isInteger(limit) || limit < 1) {
     throw new Error('Radius must be a nonnegative integer and limit a positive integer.');
   }

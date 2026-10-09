@@ -4,6 +4,13 @@ import { RING_SPACING, type Position } from '../layout/radial';
 
 export const LAYER_COLORS = ['#f6e7ad', '#79c6ce', '#b6afe5', '#eaa378'];
 
+export function updatePositions(cy: Core, positions: ReadonlyMap<string, Position>, origin: Position): void {
+  cy.batch(() => {
+    cy.nodes('.word').positions((node) => positions.get(node.id())!);
+    cy.nodes('.ring').positions(() => origin);
+  });
+}
+
 export function updateGraph(cy: Core, view: GraphView, positions: ReadonlyMap<string, Position>, rings: boolean): void {
   const ids = new Set([...view.words, ...view.edges.map((edge) => edge.id)]);
   cy.batch(() => {
