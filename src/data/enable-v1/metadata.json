@@ -1,0 +1,17 @@
+{
+  "id": "enable-v1",
+  "name": "ENABLE (four-letter extract)",
+  "sourceUrl": "https://github.com/dolph/dictionary",
+  "sourceCommit": "233d25a56b9ac8bef906916ccf091a976995cce0",
+  "sourceFileUrl": "https://raw.githubusercontent.com/dolph/dictionary/233d25a56b9ac8bef906916ccf091a976995cce0/enable1.txt",
+  "retrievedDate": "2026-10-08",
+  "normalization": "Trim each line, accept ASCII letters only with length 4, lowercase, deduplicate, sort; LF with final newline.",
+  "normalizedWordCount": 3903,
+  "sourceSha256": "3f16130220645692ed49c7134e24a18504c2ca55b3c012f7290e3e77c63b1a89",
+  "extractSha256": "ef4d12b4358cbefbc7ec85e390bbe650ed55756f6a1b890cdc2bd4af8184972a",
+  "permission": "Public-domain dedication stated in the ENABLE documentation; the dolph mirror does not include a separate license file.",
+  "permissionNoticeUrl": "https://raw.githubusercontent.com/BartMassey/wordlists/af52415c13af809bd8757a40f17f46e79d09583c/README-enable2k.txt",
+  "permissionNoticeSha256": "ce998d561ba84df4aea9840a8e729218fa61cf5de5d8480e3efc9965a9a22751",
+  "attribution": "ENABLE compiled by Alan Beale and M. Cooper; word-list mirror maintained by dolph.",
+  "officialPoopleDictionary": false
+}

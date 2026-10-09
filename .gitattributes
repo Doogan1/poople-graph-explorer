@@ -1,0 +1,3 @@
+* text=auto
+# Provenance hashes refer to exact bytes, including line endings.
+src/data/enable-v1/*.txt -text
